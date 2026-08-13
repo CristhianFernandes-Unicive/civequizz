@@ -1,0 +1,38 @@
+[
+  {
+    "id": "Q-1001",
+    "enunciado": "Qual é a principal característica da avaliação formativa?",
+    "opcoes": [
+      "A) Classificar os alunos em ordem de nota.",
+      "B) Acompanhar o processo de aprendizagem e fornecer feedback.",
+      "C) Aplicar punições a quem não atinge a média.",
+      "D) Substituir aulas por trabalhos em grupo.",
+      "E) Apenas cumprir burocracia do calendário."
+    ],
+    "correta": 1
+  },
+  {
+    "id": "Q-1002",
+    "enunciado": "O planejamento de ensino deve ser encarado como:",
+    "opcoes": [
+      "A) Um documento estático que nunca muda.",
+      "B) Um guia flexível e adaptável às necessidades da turma.",
+      "C) Uma obrigação meramente burocrática.",
+      "D) Algo desnecessário para professores experientes.",
+      "E) Copiado integralmente do ano anterior."
+    ],
+    "correta": 1
+  },
+  {
+    "id": "Q-1003",
+    "enunciado": "Como a tecnologia pode auxiliar na educação contemporânea?",
+    "opcoes": [
+      "A) Substituindo a leitura de livros e textos.",
+      "B) Diversificando as formas de acesso ao conhecimento e engajamento.",
+      "C) Garantindo notas máximas para todos.",
+      "D) Eliminando a interação social na escola.",
+      "E) Servindo apenas para entretenimento e jogos."
+    ],
+    "correta": 1
+  }
+]
