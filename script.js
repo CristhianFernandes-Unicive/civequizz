@@ -2,12 +2,12 @@ const PRECO_PADRAO_ITEM = 10;
 const CATALOGO_ITENS = {
     homem: {
         roupa: [ { id: "roupa_padrao_h", nome: "Traje Padrão", preco: 0, img: "img/roupa_padrao_h.png" }, { id: "roupa1h", nome: "Roupa Casual", preco: PRECO_PADRAO_ITEM, img: "img/roupa1h.png" } ],
-        chapeu: [ { id: "chapeu1h", nome: "Chapéu Descolado", preco: PRECO_PADRAO_ITEM, img: "img/chapeu1h.png" } ],
+        chapeu: [ { id: "chapeu1h", nome: "Coroa de Rei", preco: PRECO_PADRAO_ITEM, img: "img/chapeu1h.png" } ],
         sapato: [ { id: "sapato1h", nome: "Tênis Esportivo", preco: PRECO_PADRAO_ITEM, img: "img/sapato1h.png" } ]
     },
     mulher: {
         roupa: [ { id: "roupa_padrao_m", nome: "Traje Padrão", preco: 0, img: "img/roupa_padrao_m.png" }, { id: "roupa1m", nome: "Roupa Casual", preco: PRECO_PADRAO_ITEM, img: "img/roupa1m.png" } ],
-        chapeu: [ { id: "chapeu1m", nome: "Chapéu Descolado", preco: PRECO_PADRAO_ITEM, img: "img/chapeu1m.png" } ],
+        chapeu: [ { id: "chapeu1m", nome: "Coroa de Rainha", preco: PRECO_PADRAO_ITEM, img: "img/chapeu1m.png" } ],
         sapato: [ { id: "sapato1m", nome: "Tênis Esportivo", preco: PRECO_PADRAO_ITEM, img: "img/sapato1m.png" } ]
     }
 };
