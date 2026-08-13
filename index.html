@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civequizz</title>
+    <link rel="icon" href="img/icon.png" type="image/png">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo"><img src="img/logo.png" alt="Civequizz" class="logo-img"></div>
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="trocarAba('enade', event)">ENADE</button>
+            <button class="tab-btn" onclick="trocarAba('desafios', event)">Desafios</button>
+            <button class="tab-btn" onclick="trocarAba('personagem', event)">Personagem</button>
+            <button class="tab-btn" onclick="trocarAba('ranking', event)">Ranking</button>
+            <button class="tab-btn" onclick="trocarAba('premios', event)">Prêmios</button>
+        </nav>
+        <div class="coins-badge"><span id="saldo-moedas">0</span> Civecoins</div>
+    </header>
+
+    <main class="main-content">
+        <!-- ABA 1: ENADE -->
+        <section id="aba-enade" class="tab-content active">
+            <div class="banner-card gradient-brand" style="margin-bottom: 20px;">
+                <div class="banner-info">
+                    <span class="badge-tag yellow">EXAME NACIONAL</span>
+                    <h1>O que é o ENADE?</h1>
+                    <p>Avalia o rendimento dos concluintes dos cursos de graduação em relação aos conteúdos programáticos, desenvolvimento de competências e habilidades necessárias para o mundo de hoje.</p>
+                </div>
+            </div>
+            <div class="white-card text-center">
+                <span class="badge-tag green">IMPORTÂNCIA</span>
+                <h3 style="margin-bottom: 15px; font-size: 22px; font-weight: 800; color: var(--text-dark);">Por que realizar a prova?</h3>
+                <p style="font-weight: 500; line-height: 1.6; color: var(--text-muted); margin-bottom: 30px; font-size: 15px;">A sua nota reflete a qualidade do seu curso para todo o país. Um bom desempenho valoriza o seu diploma no mercado de trabalho. A participação é obrigatória para a emissão do seu diploma!</p>
+                <a href="https://enade.inep.gov.br/enade/#!/index" target="_blank" style="text-decoration: none;">
+                    <button class="btn-green-icon">Acessar o Site Oficial do ENADE</button>
+                </a>
+            </div>
+        </section>
+
+        <!-- ABA 2: DESAFIOS -->
+        <section id="aba-desafios" class="tab-content">
+            <div id="area-normal-desafios">
+                <div class="desafios-grid-top">
+                    <div class="banner-card gradient-brand">
+                        <div class="banner-info">
+                            <span class="badge-tag yellow">DESAFIO DO DIA</span>
+                            <h1>Sua jornada acadêmica!</h1>
+                            <p>As perguntas agora são sorteadas do seu curso! Responda, desafie-se e conquiste 50 Civecoins por acerto.</p>
+                            <button class="btn-green-icon" onclick="carregarDesafioDataAtual()">⚡ Desafios de Hoje</button>
+                        </div>
+                    </div>
+                    <div class="white-card avatar-home-card text-center" style="display: flex; flex-direction: column; justify-content: center;">
+                        <span class="badge-tag orange">TREINAMENTO</span>
+                        <h3 style="font-size: 16px; margin-bottom: 10px; font-weight: 800; color: var(--text-dark);">Treine aleatoriamente</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600;">Ganhe moedas sem depender do calendário!</p>
+                        <button class="btn-auth" style="margin-top: 0; background: var(--accent-orange);" onclick="iniciarModoSemFim()">🕹️ MODO SEM FIM</button>
+                    </div>
+                </div>
+
+                <div class="white-card">
+                    <span class="badge-tag grey">CALENDÁRIO</span>
+                    <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 10px; color: var(--text-dark);">Escolha a data do desafio</h2>
+                    <p class="subtext-info">Acesse o desafio de hoje e dos últimos 7 dias. Para datas passadas, você verá o gabarito apenas se tiver participado.</p>
+                    <div class="calendar-controls"><input type="date" id="seletor-data" min="2026-07-01" max="2026-12-31" onchange="carregarDesafioPelaData(this.value)"></div>
+                    <div class="calendar-list" id="lista-datas-recentes"></div>
+                </div>
+
+                <div class="white-card" id="area-quiz-container">
+                    <div id="quiz-header">
+                        <span class="badge-tag green" id="quiz-status-tag">STATUS</span>
+                        <h3 id="quiz-data-titulo" style="font-size: 20px; font-weight: 800; color: var(--text-dark);">Selecione uma data acima</h3>
+                    </div>
+                    <div id="container-pre-desafio"><p class="text-muted" style="margin-top: 15px; font-weight: 600;">Clique em "Desafios de Hoje" ou selecione uma data.</p></div>
+                    <div id="quiz-perguntas-lista"></div>
+                </div>
+            </div>
+
+            <!-- MODO SEM FIM -->
+            <div id="area-sem-fim" class="hidden">
+                <div class="white-card">
+                    <button class="btn-sair" onclick="encerrarModoSemFim()" style="float: right; font-size: 14px;">❌ Sair do Treino</button>
+                    <span class="badge-tag orange">TREINAMENTO</span>
+                    <h2 style="margin-bottom: 15px; font-size: 22px; font-weight: 800; color: var(--text-dark);">Modo Sem Fim</h2>
+                    <div class="endless-header">
+                        <h3>As questões não param!</h3>
+                        <p style="font-size: 14px; font-weight: 600; color: var(--text-muted);">+5 Civecoins por acerto | +1 Civecoin por erro.<br>Neste modo não se ganha avanço na Trilha de Prêmios, mas seu recorde vai para o Ranking!</p>
+                    </div>
+                    <div id="sem-fim-pergunta-container"></div>
+                    <button id="btn-proxima-sem-fim" class="btn-green-icon hidden" style="width: 100%; margin-top: 20px; background: var(--unicive-green);" onclick="mostrarProximaSemFim()">Próxima Questão ➔</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 3: PERSONAGEM -->
+        <section id="aba-personagem" class="tab-content">
+            <div class="personagem-layout">
+                <div class="white-card text-center preview-personagem-card">
+                    <span class="badge-tag green">VISUAL ATUAL</span>
+                    <h3 class="card-title" id="nome-personagem-titulo" style="margin-bottom: 25px; font-weight: 800; font-size: 20px; color: var(--text-dark);">Meu Avatar</h3>
+                    <div class="genero-selector">
+                        <button id="btn-gen-h" class="btn-genero active" onclick="alterarGenero('homem')">Masculino</button>
+                        <button id="btn-gen-m" class="btn-genero" onclick="alterarGenero('mulher')">Feminino</button>
+                    </div>
+                    <div class="avatar-display-box grande-avatar">
+                        <img id="layer-corpo" class="avatar-layer" src="img/corpo_homem.png" alt="Corpo Base">
+                        <img id="layer-sapato" class="avatar-layer hidden" src="" alt="Sapato">
+                        <img id="layer-roupa" class="avatar-layer" src="img/roupa_padrao_h.png" alt="Roupa">
+                        <img id="layer-chapeu" class="avatar-layer hidden" src="" alt="Chapéu">
+                    </div>
+                </div>
+
+                <div class="white-card loja-container">
+                    <span class="badge-tag yellow">LOJA UNICIVE</span>
+                    <h3 class="card-title" style="font-size: 20px; font-weight: 800; color: var(--text-dark); margin-bottom: 20px;">Personalize seu Estilo</h3>
+                    <div class="loja-tabs">
+                        <button class="loja-tab-btn active" onclick="trocarCategoriaLoja('roupa', event)">👕 Roupas</button>
+                        <button class="loja-tab-btn" onclick="trocarCategoriaLoja('chapeu', event)">🎩 Chapéus</button>
+                        <button class="loja-tab-btn" onclick="trocarCategoriaLoja('sapato', event)">👟 Sapatos</button>
+                    </div>
+                    <div class="items-grid" id="grid-itens-loja"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 4: RANKING TRIPLO -->
+        <section id="aba-ranking" class="tab-content">
+            <div class="banner-card gradient-brand" style="margin-bottom: 20px;">
+                <div class="banner-info">
+                    <span class="badge-tag yellow">QUADRO DE HONRA</span>
+                    <h1>Ranking de Estudantes</h1>
+                    <p>Acompanhe o desempenho da comunidade! Filtre por Geral ou pelo seu Curso e descubra quem lidera nas categorias.</p>
+                </div>
+            </div>
+            <div class="white-card">
+                
+                <div class="ranking-filters">
+                    <div class="filter-group" id="filter-scope">
+                        <button class="active" onclick="mudarRankingEscopo('geral')">Geral</button>
+                        <button onclick="mudarRankingEscopo('curso')">Meu Curso</button>
+                    </div>
+                    <div class="filter-group" id="filter-cat">
+                        <button class="active" onclick="mudarRankingCategoria('diario')">⏱️ Desafio Diário</button>
+                        <button onclick="mudarRankingCategoria('semanal')">📅 Desafio Semanal</button>
+                        <button onclick="mudarRankingCategoria('semfim')">🕹️ Modo Sem Fim</button>
+                    </div>
+                </div>
+                
+                <p id="ranking-desc" class="ranking-desc">Carregando...</p>
+
+                <div class="ranking-list" id="lista-ranking-alunos"></div>
+                <div id="meu-ranking-pos" class="my-ranking-row"></div>
+            </div>
+        </section>
+
+        <!-- ABA 5: PRÊMIOS -->
+        <section id="aba-premios" class="tab-content">
+            <div class="white-card">
+                <span class="badge-tag yellow">PROGRESSO GLOBAL</span>
+                <h3 class="card-title" style="font-size: 22px; font-weight: 800; color: var(--text-dark);">Sua Trilha de Acertos: <span id="contador-acertos-trilha" style="color:var(--unicive-green); font-size: 24px;">0</span> / 400</h3>
+                <div class="progress-bar-container"><div class="progress-bar-fill" id="barra-progresso-premios" style="width: 0%;"></div></div>
+                <div class="trilha-mapa-container" id="trilha-mapa-conteudo"></div>
+            </div>
+        </section>
+
+    </main>
+    <script src="./script.js"></script>
+</body>
+</html>

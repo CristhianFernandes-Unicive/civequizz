@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civequizz - Painel Administrativo</title>
+    <link rel="icon" href="img/icon.png" type="image/png">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body class="admin-body">
+    <header class="header">
+        <div class="logo">
+            <img src="img/logo.png" alt="Civequizz" class="logo-img" style="display:inline-block; vertical-align: middle;">
+            <span class="badge-tag orange" style="display:inline-block; margin-left:15px; vertical-align: super;">ADMIN</span>
+        </div>
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="trocarAbaAdmin('progresso', event)">Progresso</button>
+            <button class="tab-btn" onclick="trocarAbaAdmin('questoes', event)">Adicionar Questão</button>
+            <button class="tab-btn" onclick="trocarAbaAdmin('contas', event)">Contas Admin</button>
+        </nav>
+        <div class="user-info-badge">
+            <span id="nome-admin-logado">👤 Admin</span>
+            <button class="btn-sair" onclick="sairAdmin()" style="margin-left:15px;">Sair</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section id="aba-progresso" class="tab-content active">
+            <div class="white-card">
+                <span class="badge-tag green">RELATÓRIO</span><h3 class="card-title" style="font-size:22px; font-weight:800; color:var(--text-dark); margin-bottom: 20px;">Progresso dos Estudantes</h3>
+                <div class="form-group" style="max-width: 350px; margin-bottom: 25px;">
+                    <label>Filtrar por Curso:</label>
+                    <select id="filtro-curso-admin" onchange="carregarTabelaAlunos()">
+                        <option value="todos">Todos os Cursos</option>
+                        <option value="lic_teste1">Licenciatura - Teste 1</option><option value="lic_teste2">Licenciatura - Teste 2</option>
+                        <option value="bac_teste1">Bacharel - Teste 1</option><option value="tec_teste1">Tecnólogo - Teste 1</option>
+                    </select>
+                </div>
+                <table class="admin-table">
+                    <thead><tr><th>Nome</th><th>RA</th><th>Curso</th><th>Acertos Trilha</th><th>Moedas</th></tr></thead>
+                    <tbody id="tabela-alunos-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="aba-questoes" class="tab-content">
+            <div class="white-card">
+                <span class="badge-tag yellow">BANCO DE DADOS</span><h3 class="card-title" style="font-size:22px; font-weight:800; color:var(--text-dark);">Nova Questão na Piscina</h3>
+                <p class="subtext-info" style="margin-bottom: 25px;">Questões salvas aqui alimentam o sorteio para o Modo Sem Fim e os Desafios Diários. Ao salvar, o arquivo JSON será baixado. Substitua o antigo na pasta <strong>dados/</strong>.</p>
+                <form id="form-nova-questao" onsubmit="salvarNovaQuestao(event)">
+                    <div class="form-group">
+                        <label>Curso Destino</label>
+                        <select id="q-curso" required>
+                            <option value="lic_teste1">Licenciatura - Teste 1</option><option value="lic_teste2">Licenciatura - Teste 2</option>
+                            <option value="bac_teste1">Bacharel - Teste 1</option><option value="tec_teste1">Tecnólogo - Teste 1</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Enunciado da Questão</label><input type="text" id="q-enunciado" required></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Opção A</label><input type="text" id="q-op0" required></div>
+                        <div class="form-group"><label>Opção B</label><input type="text" id="q-op1" required></div>
+                        <div class="form-group"><label>Opção C</label><input type="text" id="q-op2" required></div>
+                        <div class="form-group"><label>Opção D</label><input type="text" id="q-op3" required></div>
+                        <div class="form-group"><label>Opção E</label><input type="text" id="q-op4" required></div>
+                        <div class="form-group"><label>Correta</label><select id="q-correta" required><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option><option value="4">E</option></select></div>
+                    </div>
+                    <button type="submit" class="btn-green-icon" style="width: 100%; margin-top: 20px;">💾 Baixar Arquivo do Curso</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="aba-contas" class="tab-content">
+            <div class="white-card">
+                <span class="badge-tag green">SEGURANÇA</span><h3 class="card-title" style="font-size:22px; font-weight:800; color:var(--text-dark);">Novo Admin</h3>
+                <form id="form-novo-admin" onsubmit="criarNovoAdmin(event)">
+                    <div class="form-row"><div class="form-group"><label>Login</label><input type="text" id="adm-login" required></div><div class="form-group"><label>Senha</label><input type="password" id="adm-senha" required></div></div>
+                    <div class="form-group">
+                        <label>Limitar Acesso (CTRL p/ vários)</label>
+                        <select id="adm-cursos" multiple size="4" style="height: 100px;">
+                            <option value="lic_teste1">Licenciatura - Teste 1</option><option value="lic_teste2">Licenciatura - Teste 2</option>
+                            <option value="bac_teste1">Bacharel - Teste 1</option><option value="tec_teste1">Tecnólogo - Teste 1</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-green-icon">Cadastrar</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <script src="./script.js"></script>
+</body>
+</html>
