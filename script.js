@@ -2,12 +2,12 @@ const PRECO_PADRAO_ITEM = 10;
 const CATALOGO_ITENS = {
     homem: {
         roupa: [ { id: "roupa_padrao_h", nome: "Traje Padrão", preco: 0, img: "img/roupa_padrao_h.png" }, { id: "roupa1h", nome: "Roupa Casual", preco: PRECO_PADRAO_ITEM, img: "img/roupa1h.png" } ],
-        chapeu: [ { id: "chapeu1h", nome: "Coroa de Rei", preco: PRECO_PADRAO_ITEM, img: "img/chapeu1h.png" } ],
+        chapeu: [ { id: "chapeu1h", nome: "Coroa do Rei", preco: PRECO_PADRAO_ITEM, img: "img/chapeu1h.png" } ],
         sapato: [ { id: "sapato1h", nome: "Tênis Esportivo", preco: PRECO_PADRAO_ITEM, img: "img/sapato1h.png" } ]
     },
     mulher: {
         roupa: [ { id: "roupa_padrao_m", nome: "Traje Padrão", preco: 0, img: "img/roupa_padrao_m.png" }, { id: "roupa1m", nome: "Roupa Casual", preco: PRECO_PADRAO_ITEM, img: "img/roupa1m.png" } ],
-        chapeu: [ { id: "chapeu1m", nome: "Coroa de Rainha", preco: PRECO_PADRAO_ITEM, img: "img/chapeu1m.png" } ],
+        chapeu: [ { id: "chapeu1m", nome: "Coroa do Rei", preco: PRECO_PADRAO_ITEM, img: "img/chapeu1m.png" } ],
         sapato: [ { id: "sapato1m", nome: "Tênis Esportivo", preco: PRECO_PADRAO_ITEM, img: "img/sapato1m.png" } ]
     }
 };
@@ -37,19 +37,34 @@ let semFimQuestoes = [];
 let semFimIndex = 0;
 let tempoInicio = 0, perguntasNoDesafio = 0, dataDesafioAtiva = "";
 
+// ==========================================
+// ROTEAMENTO (ATUALIZADO PARA index.html SENDO O LOGIN)
+// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     const u = JSON.parse(localStorage.getItem('usuario_logado'));
-    if (window.location.pathname.includes("index.html")) {
-        if (!u || u.tipo === 'admin') return window.location.href = "login.html";
+    
+    // TELA DO ALUNO (AGORA É plataforma.html)
+    if (window.location.pathname.includes("plataforma.html")) {
+        if (!u || u.tipo === 'admin') return window.location.href = "index.html"; // Redireciona pro login
         if (!u.avatar) u.avatar = { genero: "homem", equipados: { corpo: "img/corpo_homem.png", roupa: "img/roupa_padrao_h.png", chapeu: "", sapato: "" }, itensComprados: ["roupa_padrao_h", "roupa_padrao_m"] };
         if (!u.historicoDesafios) u.historicoDesafios = {};
         if (u.acertosSemFim === undefined) u.acertosSemFim = 0;
         salvarUsuario(u); atualizarInterfaceUsuario(); gerarBotoesCalendarioRecentes(); carregarDesafioDataAtual(); atualizarVisualizacaoAvatar(); carregarItensLoja(); renderizarRanking();
     }
+    
+    // TELA DO ADMIN
     if (window.location.pathname.includes("admin.html")) {
-        if (!u || u.tipo !== 'admin') return window.location.href = "login.html";
+        if (!u || u.tipo !== 'admin') return window.location.href = "index.html"; // Redireciona pro login
         document.getElementById('nome-admin-logado').innerText = `👤 ${u.nome || u.login}`;
         carregarTabelaAlunos();
+    }
+
+    // TELA DE LOGIN (index.html ou na raiz / do GitHub Pages)
+    if (window.location.pathname.includes("index.html") || window.location.pathname.endsWith("/")) {
+        if (u) { // Se já estiver logado, joga para dentro do sistema automaticamente!
+            if (u.tipo === 'admin') window.location.href = "admin.html";
+            else window.location.href = "plataforma.html";
+        }
     }
 });
 
@@ -105,19 +120,22 @@ function realizarCadastro(event) {
 
 function realizarLogin(e) {
     e.preventDefault(); const em = document.getElementById('login-email').value, s = document.getElementById('login-senha').value;
+    
     if (em === "Admin" && s === "UN1C1V3") { localStorage.setItem('usuario_logado', JSON.stringify({ tipo: 'admin', nome: 'Administrador Master', cursosPermitidos: 'todos' })); return window.location.href = "admin.html"; }
     if (em === "aluno@teste.com" && s === "123456") {
         const at = { nome: "Estudante de Teste", email: "aluno@teste.com", ra: "2026001", curso: "lic_teste1", civecoins: 150, acertosTotal: 12, acertosSemFim: 20, historicoDesafios:{}, avatar: { genero: "homem", equipados: { corpo: "img/corpo_homem.png", roupa: "img/roupa_padrao_h.png", chapeu: "", sapato: "" }, itensComprados: ["roupa_padrao_h"] } };
-        localStorage.setItem('usuario_logado', JSON.stringify(at)); return window.location.href = "index.html";
+        localStorage.setItem('usuario_logado', JSON.stringify(at)); return window.location.href = "plataforma.html";
     }
-    let al = JSON.parse(localStorage.getItem('admins_unicive')) || []; const adm = al.find(a => a.login === em && a.senha === s);
+    
+    let al = JSON.parse(localStorage.getItem('admins_unicive')) || [], adm = al.find(a => a.login === em && a.senha === s);
     if (adm) { localStorage.setItem('usuario_logado', JSON.stringify(adm)); return window.location.href = "admin.html"; }
-    let us = JSON.parse(localStorage.getItem('usuarios_unicive')) || []; const user = us.find(u => u.email === em && u.senha === s);
-    if (user) { localStorage.setItem('usuario_logado', JSON.stringify(user)); window.location.href = "index.html"; } else { alert("E-mail ou senha incorretos!"); }
+    
+    let us = JSON.parse(localStorage.getItem('usuarios_unicive')) || [], user = us.find(u => u.email === em && u.senha === s);
+    if (user) { localStorage.setItem('usuario_logado', JSON.stringify(user)); window.location.href = "plataforma.html"; } else { alert("E-mail ou senha incorretos!"); }
 }
 
-function sairAluno() { localStorage.removeItem('usuario_logado'); window.location.href = "login.html"; }
-function sairAdmin() { localStorage.removeItem('usuario_logado'); window.location.href = "login.html"; }
+function sairAluno() { localStorage.removeItem('usuario_logado'); window.location.href = "index.html"; }
+function sairAdmin() { localStorage.removeItem('usuario_logado'); window.location.href = "index.html"; }
 
 // ==========================================
 // FUNÇÕES DO ADMIN E PLATAFORMA
@@ -310,4 +328,3 @@ function renderizarMapaTrilha(pts) { const m=document.getElementById('trilha-map
 
 function salvarUsuario(u) { localStorage.setItem('usuario_logado', JSON.stringify(u)); let us = JSON.parse(localStorage.getItem('usuarios_unicive')) || []; const i = us.findIndex(x => x.email === u.email); if (i !== -1) { us[i] = u; localStorage.setItem('usuarios_unicive', JSON.stringify(us)); } }
 function trocarAba(aba, ev) { document.querySelectorAll('.tab-content').forEach(a => a.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(`aba-${aba}`).classList.add('active'); if (ev) ev.target.classList.add('active'); }
-function trocarAbaDirect(aba) { trocarAba(aba, null); const b=document.querySelectorAll('.tab-btn'); if(aba==='personagem'&&b[2]) b[2].classList.add('active'); }
